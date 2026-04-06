@@ -1,6 +1,8 @@
-<div class="welcome-container">
-  <h1>¡Bienvenido!</h1>
-  <p>Has iniciado sesión correctamente.</p>
+<div class="welcome-container shadow-lg">
+  <h1 class="display-4 fw-bold">¡Bienvenido!</h1>
+  <p class="lead opacity-75">Has iniciado sesión correctamente.</p>
 
-  <button (click)="logout()">Cerrar sesión</button>
+  <button class="btn btn-logout mt-3 px-4 fw-bold text-uppercase" (click)="logout()">
+    <i class="bi bi-box-arrow-right me-2"></i>Cerrar sesión
+  </button>
 </div>

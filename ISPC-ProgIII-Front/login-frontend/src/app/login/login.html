@@ -1,46 +1,68 @@
-<div class="login-container">
-  <h2>Login</h2>
+<div class="d-flex align-items-center justify-content-center vh-100">
+  <div class="login-container shadow-lg">
+    <h2 class="fw-bold text-center mb-4">Login</h2>
 
-  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      
+      <div class="mb-3">
+        <label class="form-label">Username:</label>
+        <input type="text" 
+               class="form-control" 
+               formControlName="username"
+               placeholder="Tu usuario">
+        
+        @if (loginForm.get('username')?.invalid && loginForm.get('username')?.touched) {
+          <small class="text-danger d-block mt-1">
+            Username requerido
+          </small>
+        }
+      </div>
 
-    <div>
-      <label>Username:</label>
-      <input type="text" formControlName="username">
+      <div class="mb-3">
+        <label class="form-label">Password:</label>
+        <input type="password" 
+               class="form-control" 
+               formControlName="password"
+               placeholder="******">
+        
+        @if (loginForm.get('password')?.invalid && loginForm.get('password')?.touched) {
+          <small class="text-danger d-block mt-1">
+            Mínimo 6 caracteres
+          </small>
+        }
+      </div>
 
-      <small *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched">
-        Username requerido
-      </small>
-    </div>
+      <div class="form-check d-flex align-items-center justify-content-center mb-3 gap-2">
+        <input class="form-check-input bg-transparent border-white-50 m-0" type="checkbox" id="remember"
+          formControlName="remember">
+        <label class="form-check-label text-white-70 fs-6" for="remember">
+          Recordarme
+        </label>
+      </div>
 
-    <div>
-      <label>Password:</label>
-      <input type="password" formControlName="password">
+      @if (errorMessage) {
+        <div class="error alert alert-danger py-2 text-center" role="alert">
+          <i class="bi bi-exclamation-triangle-fill me-2"></i>{{ errorMessage }}
+        </div>
+      }
 
-      <small *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
-        Mínimo 6 caracteres
-      </small>
-    </div>
+      <button type="submit" 
+              class="btn-gradient w-100 py-2 fw-bold" 
+              [disabled]="loginForm.invalid || loading">
+        @if (loading) {
+          <span class="spinner-border spinner-border-sm me-2"></span>
+          Cargando...
+        } @else {
+          Login
+        }
+      </button>
 
-    <!-- Recordarme -->
-    <div class="remember">
-      <input type="checkbox" formControlName="remember">
-      <label>Recordarme</label>
-    </div>
+      <div class="extra-links mt-3">
+        <a routerLink="/forgot-password" class="text-decoration-none">
+          ¿Olvidaste tu contraseña?
+        </a>
+      </div>
 
-    <!-- Error -->
-    <div class="error" *ngIf="errorMessage">
-      {{ errorMessage }}
-    </div>
-
-    <!-- Botón -->
-    <button type="submit" [disabled]="loginForm.invalid || loading">
-      {{ loading ? 'Cargando...' : 'Login' }}
-    </button>
-
-    <!-- Forgot -->
-    <div class="extra-links">
-      <a routerLink="/forgot-password">¿Olvidaste tu contraseña?</a>
-    </div>
-
-  </form>
+    </form>
+  </div>
 </div>

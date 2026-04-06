@@ -2,9 +2,9 @@
 
 /* Contenedor tipo glass */
 .login-container {
-  max-width: 400px;
   margin: 100px auto;
   padding: 30px;
+  width: 400px;
 
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
@@ -21,16 +21,25 @@ h2 {
 }
 
 /* Inputs */
-input {
+/* Cambiá tu regla de input por esta (para que no toque el checkbox) */
+input:not([type="checkbox"]) {
   width: 100%;
   padding: 10px;
   margin-top: 5px;
-
   border: none;
   border-radius: 8px;
-
   background: rgba(255,255,255,0.2);
   color: white;
+}
+
+/* Agregá esto para que el cuadradito sea chiquito y se vea */
+.form-check-input {
+  width: 18px !important; /* Forzamos el tamaño */
+  height: 18px !important;
+  margin: 0 !important;
+  cursor: pointer;
+  background-color: rgba(255, 255, 255, 0.2) !important;
+  border: 1px solid rgba(255, 255, 255, 0.5) !important;
 }
 
 /* Placeholder */

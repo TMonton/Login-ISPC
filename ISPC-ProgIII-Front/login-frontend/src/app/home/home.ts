@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -7,9 +8,12 @@ import { Component } from '@angular/core';
   styleUrl: './home.css',
 })
 export class Home {
+  private router = inject(Router);
+
   logout() {
     localStorage.removeItem('access');
     sessionStorage.removeItem('access');
-    window.location.href = '/login';
+    // Navegación interna de Angular
+    this.router.navigate(['/login']);
   }
 }
