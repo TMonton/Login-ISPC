@@ -137,8 +137,54 @@ python manage.py test
 2) Loguear y guardar `access`
 3) Enviar `Authorization: Bearer <access>` en cada request
 
+Implementación para los nuevos usuarios que tiene que validar su cuenta por primera vez al registarse si no no les deja ingresar:
 
-Implementación del OTP en la contraseña: 
+1. Flujo de Registro y Activación (User Journey A)
+Este paso comprueba que nadie pueda entrar al sistema sin validar su identidad primero.
+
+Paso 1.1: Registro de usuario
+
+Endpoint: POST /api/register/
+
+Body:  {
+    "username": "juan", 
+    "email": "juan@gmail.com", 
+    "password": "juan123"
+    
+  }
+
+Qué mirar: En la consola de Django, buscá el mensaje --- VERIFICACIÓN DE CUENTA --- y copiá el código de 6 dígitos.
+
+Paso 1.2: Intento de Login fallido (Prueba de seguridad) esto se puede hacer desde el login de la web 
+
+Endpoint: POST /api/login/
+
+Body: {"username": "juan", "password": "juan123"}
+
+Qué mirar: Debería devolver un error (401 o similar) porque el usuario tiene is_active = False. Esto demuestra que la protección funciona.
+
+Paso 1.3: Verificación de cuenta
+
+Endpoint: POST /api/verify-account/
+
+Body:   {
+    "email": "juan@gmail.com", 
+    "otp": "815861"
+    
+  }
+
+Qué mirar: Debería responder "Cuenta activada con éxito".
+
+Paso 1.4: Login exitoso
+
+Repetí el Paso 1.2. Ahora sí deberías recibir los tokens JWT (access y refresh).
+
+
+
+
+
+
+Implementación del OTP en la contraseña para cambiar la contraseña si se te olvidó: 
 
 ¡Buenísimo! Vamos por partes: primero te explico cómo testearlo (usando Postman o Insomnia) y después te doy la "letra" para que luzcas como un experto cuando te pregunten qué hiciste.
 

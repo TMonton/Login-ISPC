@@ -19,17 +19,20 @@ class RegisterView(generics.CreateAPIView):
     serializer_class = RegisterSerializer
 
     def perform_create(self, serializer):
-        # Guardamos al usuario pero lo seteamos como inactivo
+        # 1. Guardamos el usuario pero como INACTIVO
         user = serializer.save()
         user.is_active = False 
         user.save()
 
-        # Generamos el OTP de bienvenida
+        # 2. Generamos el OTP de bienvenida
         otp_obj = OTP.objects.create(user=user)
         code = otp_obj.generate_code()
         
-        print(f"--- VERIFICACIÓN DE CUENTA ---")
-        print(f"Usuario: {user.username} | Código: {code}")
+        # 3. Lo mostramos en consola para el TP
+        print(f"\n{"="*30}")
+        print(f"NUEVO REGISTRO: {user.username}")
+        print(f"CÓDIGO DE VERIFICACIÓN: {code}")
+        print(f"{"="*30}\n")
         
 class VerifyAccountView(APIView):
     permission_classes = (AllowAny,)
@@ -39,19 +42,25 @@ class VerifyAccountView(APIView):
         code = request.data.get('otp')
         
         try:
+            # Buscamos el código que coincida con el email
             otp_record = OTP.objects.get(user__email=email, code=code)
             
-            # Activamos al usuario
+            # ACTIVACIÓN: Cambiamos el estado del usuario a True
             user = otp_record.user
             user.is_active = True
             user.save()
             
-            # Borramos el OTP porque ya cumplió su función
+            # Borramos el código para que no se use de nuevo
             otp_record.delete()
             
-            return Response({"message": "Cuenta activada con éxito. Ya podés loguearte."}, status=status.HTTP_200_OK)
+            return Response({
+                "message": "Cuenta activada con éxito. Ya podés iniciar sesión."
+            }, status=status.HTTP_200_OK)
+            
         except OTP.DoesNotExist:
-            return Response({"error": "Código incorrecto."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({
+                "error": "Código de verificación inválido o expirado."
+            }, status=status.HTTP_400_BAD_REQUEST)
 
 class UserListView(generics.ListAPIView):
     queryset = User.objects.all()
